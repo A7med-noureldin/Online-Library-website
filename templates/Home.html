@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Library Manager{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="home">
+    <header class="content">
+        <h1>Welcome to Library Manager</h1>
+        <p>Your gateway to a world of knowledge and discovery</p>
+        <p>Browse through thousands of books, manage your reading list, and join our growing community of book lovers.</p>
+        
+        <div class="button-group">
+            <a href="{% url 'browse' %}" class="browse-button">
+                <i class="fas fa-search"></i> Browse Books
+            </a>
+            {% if not user.is_authenticated %}
+            <a href="{% url 'signup' %}" class="browse-button">
+                <i class="fas fa-user-plus"></i> Join Now
+            </a>
+            {% endif %}
+        </div>
+    </header>
+
+    <div class="features">
+        <h2>Why Choose Our Library?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-book-open"></i>
+                <h3>Extensive Collection</h3>
+                <p>Access thousands of books across various genres and subjects</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-clock"></i>
+                <h3>24/7 Access</h3>
+                <p>Read and borrow books anytime, anywhere</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-search"></i>
+                <h3>Easy Search</h3>
+                <p>Find your next read with our powerful search system</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-tasks"></i>
+                <h3>Book Management</h3>
+                <p>Keep track of your borrowed books</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="Start" id="start-section">
+        <h1>Ready to Start Reading?</h1>
+        <p>Join our library today and get access to thousands of books</p>
+        <a href="{% url 'signup' %}">Sign Up Now</a>
+    </div>
+    <footer class="footer">
+        <p>©2025 Library Manager Project. All rights reserved.</p>
+    </footer>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/home.js' %}"></script>
+{% endblock %}

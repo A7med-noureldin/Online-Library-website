@@ -1,0 +1,99 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    height: 100%;
+    background-color: #f9f9f9;
+}
+
+.home {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+nav {
+    height: 80px;
+    background-color: #1a1a1a;
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo p {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.nav-links .active {
+    color: #4caf50;
+}
+
+.nav-links a:hover {
+    color: #4caf50;
+}
+
+.about-project {
+    padding: 40px;
+}
+
+.contributors-table {
+    margin: 30px 0;
+    overflow-x: auto; /* Makes table responsive */
+    padding: 0 40px;
+}
+
+.contributors-table table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.contributors-table th, 
+.contributors-table td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.contributors-table th {
+    background-color: black;
+    color: white;
+}
+
+.contributors-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+.about-project pre {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}

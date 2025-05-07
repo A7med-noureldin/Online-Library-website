@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - Library Manager{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/About_us.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="home">
+    <div class="about-project">
+        <h4>About Project:</h4>
+        <pre>
+            The Online Library Website is a digital platform that allows users to search for ,view,and borrow books.
+            It features two user roles:Admins can manage books by adding, editing, and deleting them, while Users
+            can browse, search, borrow books, and view their borrowed list. A dynamic navigatino bar adjusts based
+            ono the logged-in user, ensuring a seamless experience across all pages. 
+        </pre>
+        <h4>Contributors:</h4>
+    </div>
+    <div class="contributors-table">    
+        <table>
+            <tr>
+                <th>Youssef Bahaa</th>
+                <th>Abdelrahman Emad</th>
+                <th> Youssef Mohamed</th>
+                <th>Peter Gerges</th>
+                <th>Ahmed Noureldin</th>
+                <th>Eyad</th>
+            </tr>
+            <tr>
+                <td><a href="https://github.com/Youssef-Bahaa" target="_blank">Link</a></td>
+                <td><a href="https://github.com/Eng0Abdo" target="_blank">Link</a></td>
+                <td><a href="https://github.com/Joe8Dev" target="_blank">Link</a></td>
+                <td><a href="https://github.com/Peter-Gergs" target="_blank">Link</a></td>
+                <td><a href="https://github.com/A7med-noureldin" target="_blank">Link</a></td>
+                <td><a href="https://github.com/Eyad240405" target="_blank">Link</a></td>
+            </tr>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/about.js' %}"></script>
+{% endblock %}

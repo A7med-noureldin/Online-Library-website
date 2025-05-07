@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Browse Books - Library Manager{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/Browse.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="search">
+    <div class="search-container"> 
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search for books..." />
+        </div>
+    </div>
+</section>
+
+<section class="select">
+    <div class="Sort_by">
+        <label for="Sort"></label>
+        <select id="Sort">
+            <option value="Sort_by">Sort_by</option>
+            <option value="A-Z">Title A-Z</option>
+            <option value="Z-A">Title Z-A</option>
+        </select>
+    </div>
+    
+    <div class="add">
+        <a href="{% url 'add_book' %}"><button type="button" onclick="addItem()">Add Book +</button></a>
+    </div>
+</section>
+
+<hr/>
+
+<section class="books" id="books-container">
+</section>
+<hr/>
+
+<footer class="footer">
+    <a href="{% url 'about' %}">About</a>
+</footer>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/browse.js' %}"></script>
+{% endblock %}

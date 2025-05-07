@@ -1,0 +1,166 @@
+html, body {
+    font-family: Arial, sans-serif;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+}
+nav {
+    height: 80px;
+    background-color: #1a1a1a;
+    display: flex;
+    position:relative;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .logo p {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .logo img {
+    height: 100px;
+    width: auto;
+  }
+  
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+  }
+  
+  .nav-links a {
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links .active{
+    color: #4caf50;
+  }
+  
+  .nav-links a:hover {
+    color: #4caf50;
+    
+  }
+
+.container {
+    width: 90%;
+    max-width: 500px;
+    background: white;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.container-libLogo {
+    display: block;
+    margin: 0 auto; 
+    width: 25%; 
+    height: auto;
+    position: relative;
+    top: 15px; 
+}
+
+input, select, textarea {
+    width: 70%;
+    padding: 10px;
+    margin: 10px auto; 
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: block; 
+}
+
+button {
+    width: 45%;
+    padding: 10px;
+    margin: 10px 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.green-btn-label {
+    background-color: green;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#choose-image {
+    display: none;
+}
+
+.a {
+    color: white;
+    font-size: 20px;
+}
+
+.footer {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    width: 100%;
+    font-size: 14px;
+    margin-top: auto;
+}
+
+input:hover, select:hover, textarea:hover {
+    border-color: #4CAF50;
+}
+
+.save-btn:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.green-btn-label:hover {
+    background-color: darkgreen;
+}
+
+label {
+    font-weight: bold; 
+    display: block;
+    margin-bottom: 5px; 
+}
+
+#book-description {
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 96%;
+    min-height: 100px;
+    resize: vertical; 
+    margin: 10px 0;
+    overflow: auto; 
+}
+.about {
+    color: white;
+    text-decoration: none;
+}
+
+.about:hover {
+    text-decoration: underline;
+    color: #ffffff;
+}

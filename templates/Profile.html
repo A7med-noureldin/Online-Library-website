@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Profile - Library Manager{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="account">
+    <h2>Account Information</h2>
+</section>
+
+<table class="account-table">
+    <tbody>
+        <tr>
+            <td>Name</td>
+            <td id="name-display"></td>
+            <td><button onclick="editField('name')">Edit</button></td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td id="email-display"></td>
+            <td><button onclick="editField('email')">Edit</button></td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td colspan="2"><a href="{% url 'change_password' %}">Change Password</a></td>
+        </tr>
+        <tr>
+            <td>Role</td>
+            <td id="role-display"></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+
+<section class="borrowed-section">
+    <h2>Borrowed Books</h2>
+    <table class="borrowed-books">
+        <thead>
+            <tr>
+                <th>Book ID</th>
+                <th>Book Name</th>
+                <th>Author</th>
+            </tr>
+        </thead>
+        <tbody id="borrowed-books-list"></tbody>
+    </table>
+</section>
+
+<footer>
+    <a href="{% url 'about' %}"><u>About Us</u></a>
+</footer>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/profile.js' %}"></script>
+{% endblock %}

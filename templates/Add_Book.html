@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Add Book - Library Manager{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/addbook.css' %}">
+{% endblock %}
+
+{% block content %}
+<div id="container" class="container">
+    <img src="{% static 'images/Library_logo.png' %}" alt="library logo" class="container-libLogo">
+    <h3>Add Book</h3>
+    
+    <label for="book-id">Book ID:</label>
+    <input id="book-id" type="number" value="0000">
+    
+    <label for="book-title">Book Title:</label>
+    <input id="book-title" type="text" value="Book Title">
+    
+    <label for="book-author">Author:</label>
+    <input id="book-author" type="text" value="Author">
+    
+    <label for="book-category">Category:</label>
+    <select id="book-category">
+        <option value="technology">Technology</option>
+        <option value="fiction">Fiction</option>
+        <option value="science">Science</option>
+        <option value="history">History</option>
+    </select>
+    
+    <label for="book-description">Book Description:</label>
+    <div id="book-description" contenteditable="true" placeholder="Enter book description here..."></div>
+
+    <label for="choose-image">Book Cover:</label>
+    <label for="choose-image" class="green-btn-label">Choose Image</label>
+    <input id="choose-image" type="file" accept="image/*">
+    <br>
+
+    <div id="image-preview-container">
+        <img id="image-preview" src="" alt="Book Cover Preview" style="max-width: 200px; display: none;">
+    </div>
+    
+    <button id="save-btn" class="save-btn">Save</button>
+</div>
+
+<div id="footer" class="footer">
+    <a href="{% url 'about' %}" class="a"><h3>About Us</h3></a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/add_book.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% load static %}
+{% extends 'base.html' %}
+
+{% block title %}Edit Book - Library Manager{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/editbook.css' %}">
+{% endblock %}
+
+{% block content %}
+<div id="container" class="container">
+    <img src="{% static 'images/Library_logo.png' %}" alt="library logo" class="container-libLogo">
+    <h3>Edit Book Details</h3>
+
+    <label for="book-id">Book ID:</label>
+    <input id="book-id" type="number" placeholder="Enter Book ID" required readonly>
+
+    <label for="book-title">Book Title:</label>
+    <input id="book-title" type="text" placeholder="Enter Book Title" required>
+
+    <label for="book-author">Author:</label>
+    <input id="book-author" type="text" placeholder="Enter Author Name" required>
+
+    <label for="book-category">Category:</label>
+    <select id="book-category" required>
+        <option value="technology">Technology</option>
+        <option value="fiction">Fiction</option>
+        <option value="science">Science</option>
+        <option value="history">History</option>
+    </select>
+
+    <label for="book-description">Book Description:</label>
+    <div id="book-description" contenteditable="true" placeholder="Enter book description here" required></div>
+
+    <label for="choose-image">Book Cover:</label>
+    <label for="choose-image" class="green-btn-label">Choose Image</label>
+    <input id="choose-image" type="file" accept="image/*" required>
+    <br>
+
+    <button id="save-btn" class="save-btn">Save</button>
+
+    <div id="image-preview-container">
+        <img id="image-preview" style="display:none; max-width: 200px;">
+    </div>
+</div>
+
+<div id="footer" class="footer">
+    <a href="{% url 'about' %}" class="about"><h2>About Us</h2></a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/edit_book.js' %}"></script>
+{% endblock %}
