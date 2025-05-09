@@ -22,43 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function setupNavbar() {
-        const currentPage = window.location.pathname.split('/').pop();
-        
-        navLinks.innerHTML = `
-            <a href="Home.html" class="${currentPage === 'Home.html' ? 'active' : ''}">
-                <i class="fas fa-home"></i> Home
-            </a>
-            <a href="Browse.html" class="${currentPage === 'Browse.html' ? 'active' : ''}">
-                <i class="fas fa-book-reader"></i> Browse
-            </a>
-        `;
-
-        if (loggedInUser) {
-            navLinks.innerHTML += `
-                <a href="Account.html" class="${currentPage === 'Account.html' ? 'active' : ''}">
-                    <i class="fas fa-user-circle"></i> My Account
-                </a>
-                <a href="#" id="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Log Out
-                </a>
-            `;
-        } else {
-            navLinks.innerHTML += `
-                <a href="Login.html" class="${currentPage === 'Login.html' ? 'active' : ''}">
-                    <i class="fas fa-sign-in-alt"></i> Log In
-                </a>
-                <a href="Sign-Up.html" class="${currentPage === 'Sign-Up.html' ? 'active' : ''}">
-                    <i class="fas fa-user-plus"></i> Sign Up
-                </a>
-            `;
-        }
-        document.getElementById('logout-btn')?.addEventListener('click', function(e) {
-            e.preventDefault();
-            localStorage.removeItem('loggedInUser');
-            window.location.href = 'Home.html';
-        });
-    }
+    
 
     function setupBookDescription() {
         bookDescriptionDiv.setAttribute('data-placeholder', 'enter book description here');

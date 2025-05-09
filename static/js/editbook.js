@@ -22,50 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.setItem('books', JSON.stringify([]));
         }
     }
-    function setupNavbar() {
-        const loggedInUser = localStorage.getItem('loggedInUser');
-        const currentPage = window.location.pathname.split('/').pop();
 
-        navLinks.innerHTML = '';
-
-        navLinks.innerHTML += `
-            <a href="Home.html" class="${currentPage === 'Home.html' ? 'active' : ''}">
-                <i class="fas fa-home"></i> Home
-            </a>
-            <a href="Browse.html" class="${currentPage === 'Browse.html' ? 'active' : ''}">
-                <i class="fas fa-book-reader"></i> Browse
-            </a>
-        `;
-
-        if (loggedInUser) {
-            navLinks.innerHTML += `
-                <a href="Profile.html" class="${currentPage === 'Profile.html' ? 'active' : ''}">
-                    <i class="fas fa-user-circle"></i> My Account
-                </a>
-                <a href="#" id="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Log Out
-                </a>
-            `;
-        } else {
-            navLinks.innerHTML += `
-                <a href="Login.html" class="${currentPage === 'Login.html' ? 'active' : ''}">
-                    <i class="fas fa-sign-in-alt"></i> Log In
-                </a>
-                <a href="Sign-Up.html" class="${currentPage === 'Sign-Up.html' ? 'active' : ''}">
-                    <i class="fas fa-user-plus"></i> Sign Up
-                </a>
-            `;
-        }
-
-        const logoutBtn = document.getElementById('logout-btn');
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                localStorage.removeItem('loggedInUser');
-                window.location.href = 'Home.html';
-            });
-        }
-    }
 
     function setupBookDescription() {
         bookDescriptionDiv.setAttribute('data-placeholder', 'Enter the book description');

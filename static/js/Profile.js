@@ -1,10 +1,9 @@
+
+
 window.onload = function () {
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
 
-    if (!loggedInUser) {
-        window.location.href = 'Login.html';
-        return;
-    }
+    
 
     document.getElementById('name-display').textContent = loggedInUser.username || 'Name not available';
     document.getElementById('email-display').textContent = loggedInUser.email || 'Email not available';

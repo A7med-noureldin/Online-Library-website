@@ -26,10 +26,11 @@
             <option value="Z-A">Title Z-A</option>
         </select>
     </div>
-    
+    {% if user.is_authenticated and user.role == "admin" %}
     <div class="add">
         <a href="{% url 'add_book' %}"><button type="button" onclick="addItem()">Add Book +</button></a>
     </div>
+    {% endif %}
 </section>
 
 <hr/>

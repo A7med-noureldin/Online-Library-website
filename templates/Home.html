@@ -52,11 +52,13 @@
         </div>
     </div>
 
+    {% if not user.is_authenticated %}
     <div class="Start" id="start-section">
         <h1>Ready to Start Reading?</h1>
         <p>Join our library today and get access to thousands of books</p>
         <a href="{% url 'signup' %}">Sign Up Now</a>
     </div>
+    {% endif %}
     <footer class="footer">
         <p>©2025 Library Manager Project. All rights reserved.</p>
     </footer>

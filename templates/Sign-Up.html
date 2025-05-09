@@ -11,15 +11,22 @@
 <div class="SignUp-container">
     <img src="{% static 'images/Library_logo.png' %}" alt="Library_logo">
     <h2>SIGN UP</h2>
-    <form action="#" id="signup-form">
+    <!-- Change from: <form action="#" id="signup-form"> -->
+    <!-- To: -->
+    <form id="signup-form">
+        {% csrf_token %}
         <p class="above-input">Username</p>
         <input type="text" placeholder="Username" id="username" required>
+        
         <p class="above-input">Password</p>
         <input type="password" placeholder="Password" id="password" required>
+        
         <p class="above-input">Confirm Password</p>
         <input type="password" placeholder="Password" id="confirm-password" required>
+        
         <p class="above-input">Email</p>
         <input type="email" placeholder="Email" id="email" required>
+        
         <br><label>Account Type</label><br>
         <div class="radio-group">
             <input type="radio" id="user" name="account_type" value="user" checked>
@@ -27,12 +34,13 @@
             <input type="radio" id="admin" name="account_type" value="admin">
             <label for="admin">Admin</label>
         </div>
-        <button>Sign Up</button>
+        
+        <button type="submit">Sign Up</button>
     </form>
     <p class="Login-text">Already have an account? <a href="{% url 'login' %}">Login</a></p>
 </div>
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/signup.js' %}"></script>
+<script src="{% static 'js/sign-up.js' %}"></script>
 {% endblock %}
