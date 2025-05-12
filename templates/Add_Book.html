@@ -1,54 +1,118 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block title %}Add Book - Library Manager{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/addbook.css' %}">
-{% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block title %}Add Book - Library
+Manager{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/addbook.css' %}" />
+<style>
+  .messages {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  .message.error {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef9a9a;
+  }
+  .message.success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+  }
+  #book-description {
+    min-height: 100px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+</style>
+{% endblock %} {% block content %}
 <div id="container" class="container">
-    <img src="{% static 'images/Library_logo.png' %}" alt="library logo" class="container-libLogo">
-    <h3>Add Book</h3>
-    
+  <img
+    src="{% static 'images/Library_logo.png' %}"
+    alt="library logo"
+    class="container-libLogo"
+  />
+  <h3>Add New Book</h3>
+
+  {% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+    <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+      {{ message }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <form id="add-book-form" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
     <label for="book-id">Book ID:</label>
-    <input id="book-id" type="number" value="0000">
-    
+    <input
+      id="book-id"
+      type="number"
+      name="book_id"
+      required
+      min="1"
+      placeholder="Enter Book ID"
+    />
+
     <label for="book-title">Book Title:</label>
-    <input id="book-title" type="text" value="Book Title">
-    
+    <input
+      id="book-title"
+      type="text"
+      name="title"
+      required
+      placeholder="Enter Book Title"
+    />
+
     <label for="book-author">Author:</label>
-    <input id="book-author" type="text" value="Author">
-    
+    <input
+      id="book-author"
+      type="text"
+      name="author"
+      required
+      placeholder="Enter Author Name"
+    />
+
     <label for="book-category">Category:</label>
-    <select id="book-category">
-        <option value="technology">Technology</option>
-        <option value="fiction">Fiction</option>
-        <option value="science">Science</option>
-        <option value="history">History</option>
+    <select id="book-category" name="category" required>
+      <option value="">Select Category</option>
+      <option value="technology">Technology</option>
+      <option value="fiction">Fiction</option>
+      <option value="science">Science</option>
+      <option value="history">History</option>
     </select>
-    
+
     <label for="book-description">Book Description:</label>
-    <div id="book-description" contenteditable="true" placeholder="Enter book description here..."></div>
+    <div
+      id="book-description"
+      contenteditable="true"
+      name="description"
+      placeholder="Enter book description here..."
+    ></div>
 
     <label for="choose-image">Book Cover:</label>
     <label for="choose-image" class="green-btn-label">Choose Image</label>
-    <input id="choose-image" type="file" accept="image/*">
-    <br>
+    <input id="choose-image" type="file" accept="image/*" name="cover_image" />
+    <br />
 
     <div id="image-preview-container">
-        <img id="image-preview" src="" alt="Book Cover Preview" style="max-width: 200px; display: none;">
+      <img
+        id="image-preview"
+        src=""
+        alt="Book Cover Preview"
+        style="display: none; max-width: 200px"
+      />
     </div>
-    
+
+    <div id="message" class="message"></div>
     <button id="save-btn" class="save-btn">Save</button>
+  </form>
 </div>
 
 <div id="footer" class="footer">
-    <a href="{% url 'about' %}" class="a"><h3>About Us</h3></a>
+  <a href="{% url 'about' %}" class="about"><h2>About Us</h2></a>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script src="{% static 'js/add_book.js' %}"></script>
+{% endblock %} {% block extra_js %}
+<script src="{% static 'js/book_management.js' %}"></script>
 {% endblock %}
