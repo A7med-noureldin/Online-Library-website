@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', function() {
     const bookIdInput = document.getElementById('book-id');
     const bookTitleInput = document.getElementById('book-title');
