@@ -1,54 +1,113 @@
-{% load static %}
-{% extends 'base.html' %}
-
-{% block title %}Edit Book - Library Manager{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/editbook.css' %}">
-{% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block title %}Edit Book - Library
+Manager{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/editbook.css' %}" />
+<style>
+    .messages {
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    .message.error {
+        background-color: #ffebee;
+        color: #c62828;
+        border: 1px solid #ef9a9a;
+    }
+    .message.success {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        border: 1px solid #a5d6a7;
+    }
+    #book-description {
+        min-height: 100px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    #search-book-form {
+        margin: 20px 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+        border-radius: 5px;
+    }
+    #search-book-form input {
+        margin: 10px 0;
+        padding: 8px;
+        width: 200px;
+    }
+    .readonly-field {
+        background-color: #f5f5f5;
+        cursor: not-allowed;
+    }
+</style>
+{% endblock %} {% block content %}
 <div id="container" class="container">
-    <img src="{% static 'images/Library_logo.png' %}" alt="library logo" class="container-libLogo">
-    <h3>Edit Book Details</h3>
+  <img
+    src="{% static 'images/Library_logo.png' %}"
+    alt="library logo"
+    class="container-libLogo"
+  />
+  <h3>Edit Book Details</h3>
+
+  {% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+    <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+      {{ message }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if not book %}
+  <!-- Search Form -->
+  <form id="search-book-form" method="GET">
+    <label for="book-id">Enter Book ID:</label>
+    <input id="book-id" type="number" name="book_id" required placeholder="Enter Book ID" min="1" />
+    <button type="submit" class="save-btn">Search Book</button>
+  </form>
+  {% else %}
+  <!-- Edit Form -->
+  <form id="edit-book-form" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
 
     <label for="book-id">Book ID:</label>
-    <input id="book-id" type="number" placeholder="Enter Book ID" required readonly>
+    <input id="book-id" type="number" name="book_id" value="{{ book.id }}" required readonly class="readonly-field" />
 
     <label for="book-title">Book Title:</label>
-    <input id="book-title" type="text" placeholder="Enter Book Title" required>
+    <input id="book-title" type="text" value="{{ book.title }}" name="title" required />
 
     <label for="book-author">Author:</label>
-    <input id="book-author" type="text" placeholder="Enter Author Name" required>
+    <input id="book-author" type="text" value="{{ book.author }}" name="author" required />
 
     <label for="book-category">Category:</label>
-    <select id="book-category" required>
-        <option value="technology">Technology</option>
-        <option value="fiction">Fiction</option>
-        <option value="science">Science</option>
-        <option value="history">History</option>
+    <select id="book-category" name="category" required>
+      <option value="technology" {% if book.category == 'technology' %}selected{% endif %}>Technology</option>
+      <option value="fiction" {% if book.category == 'fiction' %}selected{% endif %}>Fiction</option>
+      <option value="science" {% if book.category == 'science' %}selected{% endif %}>Science</option>
+      <option value="history" {% if book.category == 'history' %}selected{% endif %}>History</option>
     </select>
 
     <label for="book-description">Book Description:</label>
-    <div id="book-description" contenteditable="true" placeholder="Enter book description here" required></div>
+    <div id="book-description" contenteditable="true" name="description">{{ book.description }}</div>
 
     <label for="choose-image">Book Cover:</label>
     <label for="choose-image" class="green-btn-label">Choose Image</label>
-    <input id="choose-image" type="file" accept="image/*" required>
-    <br>
-
-    <button id="save-btn" class="save-btn">Save</button>
+    <input id="choose-image" type="file" accept="image/*" name="cover_image" />
+    <br />
 
     <div id="image-preview-container">
-        <img id="image-preview" style="display:none; max-width: 200px;">
+      <img id="image-preview" src="{{ book.cover_image }}" alt="Book Cover Preview" style="max-width: 200px" />
     </div>
+
+    <div id="message" class="message"></div>
+    <button type="submit" id="save-btn" class="save-btn">Save</button>
+  </form>
+  {% endif %}
 </div>
 
 <div id="footer" class="footer">
-    <a href="{% url 'about' %}" class="about"><h2>About Us</h2></a>
+  <a href="{% url 'about' %}" class="about"><h2>About Us</h2></a>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script src="{% static 'js/edit_book.js' %}"></script>
+{% endblock %} {% block extra_js %}
+<script src="{% static 'js/book_management.js' %}"></script>
 {% endblock %}
