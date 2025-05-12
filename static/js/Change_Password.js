@@ -25,42 +25,69 @@ document.getElementById("change-password-form").addEventListener("submit", funct
     const users = JSON.parse(localStorage.getItem('users')) || [];
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
 
-    const userIndex = users.findIndex(user => user.username === loggedInUser.username && user.password === oldPass);
+    // if (!loggedInUser) {
+    //     showError("No logged in user found.");
+    //     return;
+    // }
+
+    const userIndex = users.findIndex(user => user.username === loggedInUser.username);
+
+    // if (userIndex === -1) {
+    //     showError("User not found.");
+    //     return;
+    // }
+
+    const user = users[userIndex];
+
+    // Debugging - log stored and entered passwords
+    console.log("Entered old password:", oldPass);
+    console.log("Stored password:", user.password);
+
+    // If you used password hashing (optional), use this:
+    // if (hashPassword(oldPass) !== user.password) {
+    if (user.password !== oldPass) {
+        showError("Old password is incorrect.");
+        return;
+    }
+
     let isValid = true;
 
-    if (userIndex === -1) {
-        showError("Old password is incorrect.");
+    if (newPass.length < 8) {
+        showError("New password must be at least 8 characters.");
         isValid = false;
-    } 
-    else {
-        if (newPass.length < 8) {
-            showError("New password must be at least 8 characters.");
-            isValid = false;
-        }
+    }
 
-        if (!isStrongPassword(newPass)) {
-            showError("Password must include uppercase, lowercase, digit, and special character.");
-            isValid = false;
-        }
+    if (!isStrongPassword(newPass)) {
+        showError("Password must include uppercase, lowercase, digit, and special character.");
+        isValid = false;
+    }
 
-        if (newPass !== confirmPass) {
-            showError("New password and confirmation do not match.");
-            isValid = false;
-        }
+    if (newPass !== confirmPass) {
+        showError("New password and confirmation do not match.");
+        isValid = false;
+    }
 
-        if (oldPass === newPass) {
-            showError("New password must be different from old password.");
-            isValid = false;
-        }
+    if (oldPass === newPass) {
+        showError("New password must be different from old password.");
+        isValid = false;
     }
 
     if (isValid) {
-        users[userIndex].password = newPass;
+        // If using password hashing:
+        // const hashedPassword = hashPassword(newPass);
+        // user.password = hashedPassword;
+        // loggedInUser.password = hashedPassword;
+
+        user.password = newPass;
         loggedInUser.password = newPass;
+
+        users[userIndex] = user;
+
         localStorage.setItem('users', JSON.stringify(users));
         localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+
         showSuccess("Password changed successfully!");
-        setTimeout(() => location.reload(), 2000);
+        setTimeout(() => location.reload(), 1000);
     }
 });
 
@@ -104,4 +131,9 @@ function isStrongPassword(password) {
         else if (specialChars.includes(char)) specialChar = true;
     }
     return lowerCase && uppercase && isDigit && specialChar;
+}
+
+// Optional basic encoding function if you want to hash passwords (not secure, but better than plain text)
+function hashPassword(password) {
+    return btoa(password); // basic base64 encoding
 }

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
 from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -264,6 +264,66 @@ def edit_book(request, book_id=None):
 def book_details(request, book_id):
     return render(request, 'Details.html', {'book_id': book_id})
 
+
 @login_required
 def change_password(request):
-    return render(request, 'Change_Password.html')
+    if request.method == 'GET':
+        return render(request, 'Change_Password.html')
+    
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            old_pass = data.get('old_pass')
+            new_pass = data.get('new_pass')
+            confirm_pass = data.get('confirm_Pass')
+            user = request.user
+
+            # Validate old password
+            if not old_pass:
+                return JsonResponse({'success': False, 'message': 'Current password is required.'})
+
+            if not user.check_password(old_pass):
+                return JsonResponse({'success': False, 'message': 'Current password is incorrect.'})
+
+            # Validate new password
+            if not new_pass:
+                return JsonResponse({'success': False, 'message': 'New password is required.'})
+
+            if len(new_pass) < 8:
+                return JsonResponse({'success': False, 'message': 'New password must be at least 8 characters long.'})
+
+            if not any(char.isdigit() for char in new_pass):
+                return JsonResponse({'success': False, 'message': 'New password must contain at least one number.'})
+
+            if not any(char.isupper() for char in new_pass):
+                return JsonResponse({'success': False, 'message': 'New password must contain at least one uppercase letter.'})
+
+            if not any(char.islower() for char in new_pass):
+                return JsonResponse({'success': False, 'message': 'New password must contain at least one lowercase letter.'})
+
+            if new_pass == old_pass:
+                return JsonResponse({'success': False, 'message': 'New password must be different from the old password.'})
+
+            if new_pass != confirm_pass:
+                return JsonResponse({'success': False, 'message': 'New passwords do not match.'})
+
+            # Change the password
+            user.set_password(new_pass)
+            user.save()
+            
+            # Update session to prevent logout
+            update_session_auth_hash(request, user)
+            
+            # Re-authenticate the user
+            login(request, user)
+
+            return JsonResponse({
+                'success': True,
+                'message': 'Password changed successfully!',
+                'redirect_url': reverse('profile')
+            })
+
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'message': 'Invalid request data.'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
