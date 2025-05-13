@@ -101,9 +101,19 @@ def signup(request):
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
 
-@login_required
+@login_required(login_url='login')
 def profile(request):
-    return render(request, 'Profile.html')
+    if not request.user.is_authenticated:
+        return redirect('login')
+    user = request.user
+    context = {
+        'user': {
+            'name': user.username,
+            'email': user.email,
+            'role': user.role
+        }
+    }
+    return render(request, 'Profile.html', context)
 
 def logout_view(request):
     logout(request)

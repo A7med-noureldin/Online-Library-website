@@ -16,12 +16,12 @@
     <tbody>
         <tr>
             <td>Name</td>
-            <td id="name-display"></td>
+            <td id="name-display">{{ user.name }}</td>
             <td><button onclick="editField('name')">Edit</button></td>
         </tr>
         <tr>
             <td>Email</td>
-            <td id="email-display"></td>
+            <td id="email-display">{{ user.email }}</td>
             <td><button onclick="editField('email')">Edit</button></td>
         </tr>
         <tr>
@@ -30,7 +30,7 @@
         </tr>
         <tr>
             <td>Role</td>
-            <td id="role-display"></td>
+            <td id="role-display">{{ user.role }}</td>
             <td></td>
         </tr>
     </tbody>

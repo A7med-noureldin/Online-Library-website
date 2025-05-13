@@ -25,18 +25,20 @@
                     <i class="fas fa-book-reader"></i> Browse
                 </a>
             </li>           
-            {% if user.is_authenticated %}
+            {% if request.user.is_authenticated %}
+                {% if not request.path == '/Profile.html' %}
                 <li>
                     <a href="{% url 'profile' %}">
                         <i class="fas fa-user-circle"></i> My Account
                     </a>
                 </li>
+                {% endif %}
                 <li>
                     <a href="{% url 'logout' %}" id="logout-btn">
                         <i class="fas fa-sign-out-alt"></i> Log Out
                     </a>
                 </li>
-            {% else %}
+            {% elif not request.path == '/Profile.html' %}
                 <li>
                     <a href="{% url 'login' %}" class="{% if request.path == '/Login.html' %}active{% endif %}">
                         <i class="fas fa-sign-in-alt"></i> Log In
