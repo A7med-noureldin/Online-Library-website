@@ -177,7 +177,7 @@ def add_book(request):
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
 
-@login_required
+
 def get_books(request):
     books = Book.objects.all()
     books_data = [
