@@ -178,6 +178,25 @@ def add_book(request):
             return JsonResponse({'success': False, 'message': str(e)})
 
 @login_required
+def get_books(request):
+    books = Book.objects.all()
+    books_data = [
+        {
+            "id": book.id,
+            "title": book.title,
+            "author": book.author,
+            "description": book.description,
+            "isbn": book.isbn,
+            "publication_year": book.publication_year,
+            "publisher": book.publisher,
+            "category": book.category,
+            "cover_image": book.cover_image.url if book.cover_image else None,
+        }
+        for book in books
+    ]
+    return JsonResponse({"books": books_data})
+
+@login_required
 def edit_book(request, book_id=None):
     if request.method == 'GET':
         # If book_id is provided in URL, use it
