@@ -5,7 +5,7 @@ const userRole = loggedInUser.accountType || "user";
 // Clear existing navigation links
 
 book = JSON.parse(localStorage.getItem("selectedBook"));
-document.getElementsByClassName("image")[0].children[0].src = book.image.data;
+document.getElementsByClassName("image")[0].children[0].src = book.cover_image;
 
 document.getElementsByClassName(
   "tags"
@@ -80,3 +80,5 @@ deleteBtn.onclick = function () {
 editBtn.onclick = function () {
   window.location.href = "Edit_Book.html";
 };
+
+console.log(book.id);

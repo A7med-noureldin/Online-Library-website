@@ -356,3 +356,6 @@ def change_password(request):
             return JsonResponse({'success': False, 'message': 'Invalid request data.'})
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
+
+def book_details(request):
+    return render(request, 'Details.html')
