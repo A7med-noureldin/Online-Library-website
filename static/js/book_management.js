@@ -1,3 +1,6 @@
+// Create a broadcast channel for communication between pages
+const bookChannel = new BroadcastChannel('book_updates');
+
 // Function to handle form submission for both add and edit book forms
 function handleBookFormSubmit(event) {
     event.preventDefault();
@@ -42,11 +45,53 @@ function handleBookFormSubmit(event) {
             messageDiv.textContent = data.message;
             messageDiv.className = 'message success';
             
-            // If redirect URL is provided, redirect after a short delay
-            if (data.redirect_url) {
-                setTimeout(() => {
-                    window.location.href = data.redirect_url;
-                }, 1500);
+            // If this is an add book form, update the browse page
+            if (form.id === 'add-book-form') {
+                // Create a new book element
+                const bookElement = document.createElement('div');
+                bookElement.className = 'book-item';
+                
+                const imgSrc = data.book.cover_image || '/static/images/default-book-image.png';
+                
+                bookElement.innerHTML = `
+                    <div class="img-container">
+                        <img src="${imgSrc}" alt="${data.book.title}">
+                    </div>
+                    <div class="content1">
+                        <h4>${data.book.title}</h4>
+                    </div>
+                    <div class="Author">
+                        <p>By ${data.book.author}</p>
+                    </div>
+                    <div class="content1_1">
+                        <p>Available</p>
+                    </div>
+                `;
+
+                bookElement.addEventListener('click', () => {
+                    localStorage.setItem('selectedBook', JSON.stringify(data.book));
+                    window.location.href = '/Details.html';
+                });
+
+                // Add the new book to the browse page
+                const booksContainer = document.getElementById('books-container');
+                if (booksContainer) {
+                    booksContainer.appendChild(bookElement);
+                }
+
+                // Reset the form
+                form.reset();
+                const imagePreview = document.getElementById('image-preview');
+                if (imagePreview) {
+                    imagePreview.src = '';
+                    imagePreview.style.display = 'none';
+                }
+
+                // Broadcast the new book to all open pages
+                bookChannel.postMessage({
+                    type: 'new_book',
+                    book: data.book
+                });
             }
         } else {
             messageDiv.textContent = data.message;
@@ -93,4 +138,42 @@ document.addEventListener('DOMContentLoaded', function() {
     if (editBookForm) {
         editBookForm.addEventListener('submit', handleBookFormSubmit);
     }
+
+    // Listen for book updates from other pages
+    bookChannel.onmessage = function(event) {
+        if (event.data.type === 'new_book') {
+            const book = event.data.book;
+            
+            // If we're on the browse page, add the new book
+            const booksContainer = document.getElementById('books-container');
+            if (booksContainer) {
+                const bookElement = document.createElement('div');
+                bookElement.className = 'book-item';
+                
+                const imgSrc = book.cover_image || '/static/images/default-book-image.png';
+                
+                bookElement.innerHTML = `
+                    <div class="img-container">
+                        <img src="${imgSrc}" alt="${book.title}">
+                    </div>
+                    <div class="content1">
+                        <h4>${book.title}</h4>
+                    </div>
+                    <div class="Author">
+                        <p>By ${book.author}</p>
+                    </div>
+                    <div class="content1_1">
+                        <p>Available</p>
+                    </div>
+                `;
+
+                bookElement.addEventListener('click', () => {
+                    localStorage.setItem('selectedBook', JSON.stringify(book));
+                    window.location.href = '/Details.html';
+                });
+
+                booksContainer.appendChild(bookElement);
+            }
+        }
+    };
 }); 
