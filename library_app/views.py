@@ -167,11 +167,24 @@ def add_book(request):
                 book.cover_image = cover_image
                 book.save()
             
+            # Prepare book data for response
+            book_data = {
+                'id': book.id,
+                'title': book.title,
+                'author': book.author,
+                'description': book.description,
+                'category': book.category,
+                'cover_image': book.cover_image.url if book.cover_image else None,
+                'isbn': book.isbn,
+                'publication_year': book.publication_year,
+                'publisher': book.publisher,
+                'availability': 'Available'
+            }
+            
             return JsonResponse({
                 'success': True,
                 'message': f'Book added successfully! Book ID: {book.id}',
-                'book_id': book.id,
-                'redirect_url': reverse('browse')
+                'book': book_data
             })
             
         except Exception as e:
