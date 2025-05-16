@@ -42,12 +42,7 @@ if (loggedInUser) {
   borrowBtn.style.display = "block";
   if (book.status == "Borrowed") {
     borrowBtn.innerHTML = "Return";
-    console.log("peter");
   }
-}
-if (userRole == "admin") {
-  deleteBtn.style.display = "block";
-  editBtn.style.display = "block";
 }
 borrowBtn.onclick = function () {
   const books = [];

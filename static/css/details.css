@@ -126,7 +126,6 @@ section .btns button {
   padding: 15px 25px;
   font-size: 18px;
   color: #fff;
-  display: none;
 }
 section .btns button:last-of-type {
   margin-left: auto;

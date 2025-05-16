@@ -1,51 +1,47 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block title %}Book Details - Library Manager{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/details.css' %}">
-{% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block title %}Book Details -
+Library Manager{% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/details.css' %}" />
+{% endblock %} {% block content %}
 <section>
-    <h2>Book Information</h2>
-    <div class="info">
-        <div class="image"><img src="" alt="" /></div>
-        <div class="text">
-            <h3>The Pragmatic Programmer: From Journeyman to Master</h3>
-            <div class="tags">
-                <ul>
-                    <li class="tag">
-                        Author: <span class="au-name">Andrew Hunt, David Thomas</span>
-                    </li>
-                    <li class="tag">Category: <span>Technology</span></li>
-                    <li class="tag">Availability: <span>Available</span></li>
-                    <li class="tag">Book ID: <span>101</span></li>
-                </ul>
-            </div>
-            <h3>Book description</h3>
-            <p id="description">
-                The Pragmatic Programmer: Your Journey to Mastery is a highly
-                regarded book on software development by Andrew Hunt and David
-                Thomas. First published in 1999 and later updated in a 20th
-                Anniversary Edition (2019), the book provides timeless principles,
-                techniques, and best practices for becoming a skilled and adaptable
-                software developer. Key Themes & Concepts.
-            </p>
-        </div>
+  <h2>Book Information</h2>
+  <div class="info">
+    <div class="image"><img src="" alt="" /></div>
+    <div class="text">
+      <h3>The Pragmatic Programmer: From Journeyman to Master</h3>
+      <div class="tags">
+        <ul>
+          <li class="tag">
+            Author: <span class="au-name">Andrew Hunt, David Thomas</span>
+          </li>
+          <li class="tag">Category: <span>Technology</span></li>
+          <li class="tag">Availability: <span>Available</span></li>
+          <li class="tag">Book ID: <span>101</span></li>
+        </ul>
+      </div>
+      <h3>Book description</h3>
+      <p id="description">
+        The Pragmatic Programmer: Your Journey to Mastery is a highly regarded
+        book on software development by Andrew Hunt and David Thomas. First
+        published in 1999 and later updated in a 20th Anniversary Edition
+        (2019), the book provides timeless principles, techniques, and best
+        practices for becoming a skilled and adaptable software developer. Key
+        Themes & Concepts.
+      </p>
     </div>
-    <div class="btns">
-        <button>Edit</button>
-        <button>Delete</button>
-        <button>Borrow</button>
-    </div>
+  </div>
+  
+  <div class="btns">
+    {% if user.is_authenticated and user.role == "admin" %}
+    <button>Edit</button>
+    <button>Delete</button>
+    {% endif %} {% if user.is_authenticated %}
+    <button>Borrow</button>
+    {% endif %}
+  </div>
 </section>
 <footer>
-    <a href="{% url 'about' %}">About US</a>
+  <a href="{% url 'about' %}">About US</a>
 </footer>
-{% endblock %}
-
-{% block extra_js %}
+{% endblock %} {% block extra_js %}
 <script src="{% static 'js/details.js' %}"></script>
 {% endblock %}
