@@ -7,33 +7,28 @@ const userRole = loggedInUser.accountType || "user";
 book = JSON.parse(localStorage.getItem("selectedBook"));
 document.getElementsByClassName("image")[0].children[0].src = book.cover_image;
 
-document.getElementsByClassName(
-  "tags"
-)[0].children[0].children[0].firstElementChild.innerHTML = book.author;
-document.getElementsByClassName(
-  "tags"
-)[0].children[0].children[1].firstElementChild.innerHTML = book.category;
-document.getElementsByClassName(
-  "tags"
-)[0].children[0].children[1].firstElementChild.innerHTML = book.category;
-document.getElementsByClassName(
-  "tags"
-)[0].children[0].children[2].firstElementChild.innerHTML = book.status;
-document.getElementsByClassName(
-  "tags"
-)[0].children[0].children[3].firstElementChild.innerHTML = book.id;
-document.getElementsByClassName(
-  "tags"
-)[0].children[0].children[3].firstElementChild.innerHTML = book.id;
-if (book.status == "Borrowed") {
+window.onload = function () {
   document.getElementsByClassName(
     "tags"
-  )[0].children[0].children[2].firstElementChild.style.color = "red";
+  )[0].children[0].children[0].firstElementChild.innerHTML = book.author || "Unknown";
+  document.getElementsByClassName(
+    "tags"
+  )[0].children[0].children[1].firstElementChild.innerHTML =
+    book.category || "other";
+  document.getElementsByClassName(
+    "tags"
+  )[0].children[0].children[2].firstElementChild.innerHTML = book.id;
+  console.log(document.getElementsByClassName("tags")[0].children[0].children);
+  if (book.status == "Borrowed") {
+    document.getElementsByClassName(
+      "tags"
+    )[0].children[0].children[2].firstElementChild.style.color = "red";
+  }
+  document.getElementById("description").innerText = book.description;
+
+  document.getElementsByClassName("text")[0].children[0].innerHTML = book.title;
+  
 }
-document.getElementById("description").innerText = book.description;
-
-document.getElementsByClassName("text")[0].children[0].innerHTML = book.title;
-
 const borrowBtn = document.querySelector("section .btns button:last-of-type");
 const deleteBtn = document.querySelector("section .btns button:nth-of-type(2)");
 const editBtn = document.querySelector("section .btns button:first-of-type");
