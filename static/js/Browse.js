@@ -23,7 +23,11 @@ document.addEventListener("DOMContentLoaded", function () {
     if (event.data.type === "new_book") {
       const book = event.data.book;
       dynamicBooks.push(book); // Add the new book to our array
-      displayBooks(dynamicBooks); // Update the display
+      filterBooks(); // Update the display with current filters
+    }
+    if (event.data.type === "update_book") {
+      // Reload all books from the server to ensure data is up-to-date
+      loadBooks();
     }
   };
 
