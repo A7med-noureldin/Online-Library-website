@@ -93,31 +93,38 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const imgSrc = book.cover_image || "images/default-book-image.png";
 
+      // Determine status text and color based on isBorrowed
+      const isBorrowed = book.isBorrowed === true;
+      const statusText = isBorrowed ? "Borrowed" : "Available";
+      const statusColor = isBorrowed ? "red" : "green";
+
       bookElement.innerHTML = `
-      <a href="/book/${book.id}/" class="book-link">
-        <div class="img-container">
-          <img src="${imgSrc}" alt="${book.title}">
-        </div>
-        <div class="content1">
-          <h4>${book.title}</h4>
-        </div>
-        <div class="Author">
-          <p>By ${book.author}</p>
-        </div>
-        <div class="content1_1">
-          <p>Available</p>
-        </div>
-      </a>
-    `;
-
-
+        <a href="/book/${book.id}/" class="book-link">
+          <div class="img-container">
+            <img src="${imgSrc}" alt="${book.title}">
+          </div>
+          <div class="content1">
+            <h4>${book.title}</h4>
+          </div>
+          <div class="Author">
+            <p>By ${book.author}</p>
+          </div>
+          <div class="content1_1">
+            <p style="background-color: ${statusColor}; height: 100%; text-decoration: none;">${statusText}</p>
+          </div>
+        </a>
+      `;
 
       booksContainer.appendChild(bookElement);
     });
   }
+
 
   // For the Add Book button
   window.addItem = function () {
     window.location.href = "Add_Book.html";
   };
 });
+
+
+

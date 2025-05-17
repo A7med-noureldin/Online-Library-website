@@ -178,7 +178,7 @@ def add_book(request):
                 'isbn': book.isbn,
                 'publication_year': book.publication_year,
                 'publisher': book.publisher,
-                'availability': 'Available'
+                'isBorrowed': book.isBorrowed,
             }
             
             return JsonResponse({
@@ -204,6 +204,8 @@ def get_books(request):
             "publisher": book.publisher,
             "category": book.category,
             "cover_image": book.cover_image.url if book.cover_image else None,
+            "isBorrowed": book.isBorrowed,
+
         }
         for book in books
     ]
