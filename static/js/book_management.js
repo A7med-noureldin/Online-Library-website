@@ -69,8 +69,7 @@ function handleBookFormSubmit(event) {
                 `;
 
                 bookElement.addEventListener('click', () => {
-                    localStorage.setItem('selectedBook', JSON.stringify(data.book));
-                    window.location.href = '/Details.html';
+                    window.location.href = `/book_details/${data.book.id}/`;
                 });
 
                 // Add the new book to the browse page
@@ -93,6 +92,14 @@ function handleBookFormSubmit(event) {
                     book: data.book
                 });
             }
+            // If this is an edit book form, broadcast the update and redirect immediately
+            if (form.id === 'edit-book-form') {
+                bookChannel.postMessage({
+                    type: 'update_book',
+                    book: data.book
+                });
+                window.location.href = '/edit_book/';
+            }
         } else {
             messageDiv.textContent = data.message;
             messageDiv.className = 'message error';
@@ -111,15 +118,13 @@ function handleBookFormSubmit(event) {
 
 // Initialize form handlers when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    const addBookForm = document.getElementById('add-book-form');
-    const editBookForm = document.getElementById('edit-book-form');
+    // Handle image preview
+    const chooseImage = document.getElementById('choose-image');
     const imagePreview = document.getElementById('image-preview');
-    const coverInput = document.getElementById('choose-image');
-
-    // Preview image before upload
-    if (coverInput) {
-        coverInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
+    
+    if (chooseImage && imagePreview) {
+        chooseImage.addEventListener('change', function() {
+            const file = this.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -131,12 +136,40 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Add form submit handlers
+    // Handle add book form submission
+    const addBookForm = document.getElementById('add-book-form');
     if (addBookForm) {
         addBookForm.addEventListener('submit', handleBookFormSubmit);
     }
+
+    // Handle edit book form submission
+    const editBookForm = document.getElementById('edit-book-form');
     if (editBookForm) {
         editBookForm.addEventListener('submit', handleBookFormSubmit);
+    }
+
+    // Handle search book form submission
+    const searchBookForm = document.getElementById('search-book-form');
+    if (searchBookForm) {
+        searchBookForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const bookId = document.getElementById('book-id').value;
+            const messageDiv = document.getElementById('message');
+            
+            if (!bookId) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Please enter a Book ID';
+                return;
+            }
+
+            // Show loading state
+            messageDiv.className = 'message';
+            messageDiv.textContent = 'Searching for book...';
+            
+            // Submit the form normally
+            window.location.href = `/edit_book/?book_id=${bookId}`;
+        });
     }
 
     // Listen for book updates from other pages
@@ -168,12 +201,30 @@ document.addEventListener('DOMContentLoaded', function() {
                 `;
 
                 bookElement.addEventListener('click', () => {
-                    localStorage.setItem('selectedBook', JSON.stringify(book));
-                    window.location.href = '/Details.html';
+                    window.location.href = `/book_details/${book.id}/`;
                 });
 
                 booksContainer.appendChild(bookElement);
             }
         }
+        if (event.data.type === 'update_book') {
+            const book = event.data.book;
+            // If we're on the browse page, update the book info
+            const booksContainer = document.getElementById('books-container');
+            if (booksContainer) {
+                const bookElements = booksContainer.getElementsByClassName('book-item');
+                for (let el of bookElements) {
+                    // Find by book id (safer than by title)
+                    const idText = el.querySelector('p:last-child')?.textContent || '';
+                    if (idText.includes('ID:') && idText.split('ID:')[1].trim() == book.id) {
+                        // Update title, author, and image
+                        el.querySelector('h4').textContent = book.title;
+                        el.querySelector('img').src = book.cover_image || '/static/images/default-book-image.png';
+                        el.querySelector('.Author p').textContent = 'By ' + book.author;
+                    }
+                }
+            }
+        }
     };
 }); 
+
