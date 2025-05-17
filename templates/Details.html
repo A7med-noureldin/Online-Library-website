@@ -14,7 +14,6 @@ Library Manager{% endblock %} {% block extra_css %}
             Author: <span class="au-name">Andrew Hunt, David Thomas</span>
           </li>
           <li class="tag">Category: <span>Technology</span></li>
-          <li class="tag">Availability: <span>Available</span></li>
           <li class="tag">Book ID: <span>101</span></li>
         </ul>
       </div>
@@ -29,14 +28,27 @@ Library Manager{% endblock %} {% block extra_css %}
       </p>
     </div>
   </div>
-  
+
   <div class="btns">
     {% if user.is_authenticated and user.role == "admin" %}
     <button>Edit</button>
-    <button>Delete</button>
-    {% endif %} {% if user.is_authenticated %}
-    <button>Borrow</button>
-    {% endif %}
+    <form method="post" action="{% url 'book_details' book.id %}">
+      {% csrf_token %}
+      <button type="submit" name="delete">Delete</button>
+    </form>
+    {% endif %} {% if user.is_authenticated %} {% if book.isBorrowed %}
+    <p>You are Borrowed this Book.</p>
+    {% if book.borrowedBy == user %}
+    <form method="post" action="{% url 'book_details' book.id %}">
+      {% csrf_token %}
+      <button type="submit" name="return">Return</button>
+    </form>
+    {% endif %} {% else %}
+    <form method="post" action="{% url 'book_details' book.id %}">
+      {% csrf_token %}
+      <button type="submit" name="borrow">Borrow</button>
+    </form>
+    {% endif %} {% endif %}
   </div>
 </section>
 <footer>

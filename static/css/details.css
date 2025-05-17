@@ -131,10 +131,10 @@ section .btns button:last-of-type {
   margin-left: auto;
   background-color: green;
 }
-section .btns button:first-of-type {
+section .btns > button:first-of-type {
   background-color: #222;
 }
-section .btns button:nth-of-type(2) {
+section .btns form:first-of-type button {
   background-color: crimson;
 }
 

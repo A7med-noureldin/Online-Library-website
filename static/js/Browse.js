@@ -1,6 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-
-
   // Handle Add Book button visibility based on role
   const addBookDiv = document.querySelector(".add");
   if (addBookDiv) {
@@ -11,19 +9,21 @@ document.addEventListener("DOMContentLoaded", function () {
   loadBooks();
 
   document.getElementById("Sort").addEventListener("change", filterBooks);
-  document.querySelector(".search-box input").addEventListener("input", filterBooks);
+  document
+    .querySelector(".search-box input")
+    .addEventListener("input", filterBooks);
 
-  let dynamicBooks = [];  // Declare globally for access
+  let dynamicBooks = []; // Declare globally for access
 
   // Create a broadcast channel for communication between pages
-  const bookChannel = new BroadcastChannel('book_updates');
+  const bookChannel = new BroadcastChannel("book_updates");
 
   // Listen for book updates from other pages
-  bookChannel.onmessage = function(event) {
-    if (event.data.type === 'new_book') {
+  bookChannel.onmessage = function (event) {
+    if (event.data.type === "new_book") {
       const book = event.data.book;
-      dynamicBooks.push(book);  // Add the new book to our array
-      displayBooks(dynamicBooks);  // Update the display
+      dynamicBooks.push(book); // Add the new book to our array
+      displayBooks(dynamicBooks); // Update the display
     }
   };
 
@@ -34,10 +34,9 @@ document.addEventListener("DOMContentLoaded", function () {
     try {
       const response = await fetch("/api/books/");
       const data = await response.json();
-      dynamicBooks = data.books || [];  // Assign value to global variable
+      dynamicBooks = data.books || []; // Assign value to global variable
 
-      displayBooks(dynamicBooks);  // Call display function
-
+      displayBooks(dynamicBooks); // Call display function
     } catch (error) {
       booksContainer.innerHTML = `<div class="no-results"><p>Error loading books.</p></div>`;
       console.error("Failed to fetch books:", error);
@@ -46,7 +45,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function filterBooks() {
     const sortValue = document.getElementById("Sort").value;
-    const searchValue = document.querySelector(".search-box input").value.toLowerCase();
+    const searchValue = document
+      .querySelector(".search-box input")
+      .value.toLowerCase();
 
     let filteredBooks = [...dynamicBooks];
 
@@ -59,16 +60,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Then filtering
     if (searchValue) {
-      filteredBooks = filteredBooks.filter((book) =>
-        (book.id && book.id.toString().includes(searchValue)) ||
-        book.title.toLowerCase().includes(searchValue) ||
-        book.author.toLowerCase().includes(searchValue) ||
-        (book.category && book.category.toLowerCase().includes(searchValue)) ||
-        (book.publisher && book.publisher.toLowerCase().includes(searchValue))
+      filteredBooks = filteredBooks.filter(
+        (book) =>
+          (book.id && book.id.toString().includes(searchValue)) ||
+          book.title.toLowerCase().includes(searchValue) ||
+          book.author.toLowerCase().includes(searchValue) ||
+          (book.category &&
+            book.category.toLowerCase().includes(searchValue)) ||
+          (book.publisher && book.publisher.toLowerCase().includes(searchValue))
       );
     }
 
-    displayBooks(filteredBooks);  // Update UI
+    displayBooks(filteredBooks); // Update UI
   }
 
   function displayBooks(books) {
@@ -87,24 +90,23 @@ document.addEventListener("DOMContentLoaded", function () {
       const imgSrc = book.cover_image || "images/default-book-image.png";
 
       bookElement.innerHTML = `
+      <a href="/book/${book.id}/" class="book-link">
         <div class="img-container">
-            <img src="${imgSrc}" alt="${book.title}">
+          <img src="${imgSrc}" alt="${book.title}">
         </div>
         <div class="content1">
-            <h4>${book.title}</h4>
+          <h4>${book.title}</h4>
         </div>
         <div class="Author">
-            <p>By ${book.author}</p>
+          <p>By ${book.author}</p>
         </div>
         <div class="content1_1">
-            <p>Available</p>
+          <p>Available</p>
         </div>
-      `;
+      </a>
+    `;
 
-      bookElement.addEventListener("click", () => {
-        localStorage.setItem("selectedBook", JSON.stringify(book));
-        window.location.href = "Details.html";
-      });
+
 
       booksContainer.appendChild(bookElement);
     });

@@ -303,9 +303,6 @@ def edit_book(request, book_id=None):
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
 
-def book_details(request, book_id):
-    return render(request, 'Details.html', {'book_id': book_id})
-
 
 @login_required
 def change_password(request):
@@ -370,5 +367,22 @@ def change_password(request):
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
 
-def book_details(request):
-    return render(request, 'Details.html')
+def book_details(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
+
+    if request.method == "POST":
+        if 'borrow' in request.POST and not book.isBorrowed:
+            book.isBorrowed = True
+            book.borrowedBy = request.user
+            book.save()
+        elif 'return' in request.POST and book.isBorrowed and book.borrowedBy == request.user:
+            book.isBorrowed = False
+            book.borrowedBy = None
+            book.save()
+        elif 'delete' in  request.POST:
+            book.delete()
+            return render(request, 'Browse.html')
+
+
+    return render(request, 'Details.html', {'book': book})
+

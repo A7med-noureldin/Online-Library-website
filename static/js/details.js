@@ -1,5 +1,5 @@
 const navLinks = document.querySelector(".nav-links");
-const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")) || '';
+const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")) || "";
 const userRole = loggedInUser.accountType || "user";
 
 // Clear existing navigation links
@@ -76,4 +76,4 @@ editBtn.onclick = function () {
   window.location.href = "Edit_Book.html";
 };
 
-console.log(book.id);
+

@@ -24,6 +24,7 @@ class Book(models.Model):
     cover_image = models.ImageField(upload_to='book_covers/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+    isBorrowed = models.BooleanField(default=False)
+    borrowedBy =models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
     def __str__(self):
         return self.title
