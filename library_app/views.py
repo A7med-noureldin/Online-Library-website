@@ -216,48 +216,26 @@ def edit_book(request, book_id=None):
         if book_id:
             try:
                 book = Book.objects.get(id=book_id)
-                return render(request, 'Edit_Book.html', {'book': {
-                    'id': book.id,
-                    'title': book.title,
-                    'author': book.author,
-                    'description': book.description,
-                    'isbn': book.isbn,
-                    'publication_year': book.publication_year,
-                    'publisher': book.publisher,
-                    'category': book.category,
-                    'cover_image': book.cover_image.url if book.cover_image else None
-                }})
+                return render(request, 'Edit_Book.html', {'book': book})
             except Book.DoesNotExist:
                 messages.error(request, f'Book with ID {book_id} not found.')
                 return render(request, 'Edit_Book.html')
         
-        # If book_id is provided in GET parameters, redirect to the edit page
+        # If book_id is provided in GET parameters, search for the book
         book_id = request.GET.get('book_id')
         if book_id:
             try:
                 # Convert book_id to integer
                 book_id = int(book_id)
                 book = Book.objects.get(id=book_id)
-                return render(request, 'Edit_Book.html', {'book': {
-                    'id': book.id,
-                    'title': book.title,
-                    'author': book.author,
-                    'description': book.description,
-                    'isbn': book.isbn,
-                    'publication_year': book.publication_year,
-                    'publisher': book.publisher,
-                    'category': book.category,
-                    'cover_image': book.cover_image.url if book.cover_image else None
-                }})
+                return render(request, 'Edit_Book.html', {'book': book})
             except (ValueError, Book.DoesNotExist):
-                # Get all book IDs for debugging
-                all_books = Book.objects.all().values_list('id', flat=True)
-                messages.error(request, f'Book with ID {book_id} not found. Available book IDs: {list(all_books)}')
+                messages.error(request, f'Book with ID {book_id} not found.')
                 return render(request, 'Edit_Book.html')
         
         # If no book_id is provided, show the search form
         return render(request, 'Edit_Book.html')
-    
+
     if request.method == 'POST':
         try:
             # Get book_id from POST data
