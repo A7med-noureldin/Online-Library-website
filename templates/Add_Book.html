@@ -23,6 +23,15 @@ Manager{% endblock %} {% block extra_css %}
     padding: 10px;
     margin-bottom: 10px;
   }
+  .about{
+    color: #ccc;
+    transition: all 0.3s;
+    text-decoration: none ;
+    text-transform: uppercase;
+  }
+  .about:hover{
+    border-color: #4CAF50;
+  }
 </style>
 {% endblock %} {% block content %}
 <div id="container" class="container">
@@ -111,7 +120,7 @@ Manager{% endblock %} {% block extra_css %}
 </div>
 
 <div id="footer" class="footer">
-  <a href="{% url 'about' %}" class="about"><h2>About Us</h2></a>
+  <a href="{% url 'about' %}" class="about"><h2>About</h2></a>
 </div>
 {% endblock %} {% block extra_js %}
 <script src="{% static 'js/book_management.js' %}"></script>

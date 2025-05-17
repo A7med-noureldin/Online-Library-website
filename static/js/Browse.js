@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <p>By ${book.author}</p>
           </div>
           <div class="content1_1">
-            <p style="background-color: ${statusColor}; height: 100%; text-decoration: none;">${statusText}</p>
+            <p style="background-color: ${statusColor}; height: 100%;">${statusText}</p>
           </div>
         </a>
       `;
