@@ -20,5 +20,7 @@ urlpatterns = [
     path('book/<int:book_id>/', views.book_details, name='book_details'),
     path('Change_Password.html', views.change_password, name='change_password'),
     path('api/books/', views.get_books, name='get_books'),
+    path('api/update-profile/', views.update_profile, name='update_profile'),
+    path('api/borrowed-books/', views.get_borrowed_books, name='get_borrowed_books'),
     # Add other URL patterns as needed
 ]
