@@ -1,5 +1,3 @@
-
-/*
 window.onload = function () {
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
 
@@ -90,4 +88,3 @@ function saveField(field) {
         alert("User not found in user list.");
     }
 }
-*/
