@@ -67,69 +67,100 @@ table {
 
 .account-table {
     width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+.account-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.account-table td:first-child {
+    font-weight: bold;
+    width: 120px;
+}
+
+.account-table button {
+    padding: 6px 12px;
+    margin: 0 4px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.account-table button:first-of-type {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.account-table button:nth-of-type(2) {
+    background-color: #2196F3;
+    color: white;
+}
+
+.account-table button:last-of-type {
+    background-color: #f44336;
+    color: white;
+}
+
+.account-table button:hover {
+    opacity: 0.9;
+}
+
+.edit-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.edit-input:focus {
+    outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 0 5px rgba(33, 150, 243, 0.3);
+}
+
+.borrowed-section {
+    margin-top: 40px;
+    padding: 0 20px;
 }
 
 .borrowed-books {
-    width: 60%;
+    width: 100%;
+    max-width: 800px;
     margin: 20px auto;
+    border-collapse: collapse;
 }
 
-table, th, td {
-    border: 2px solid #ddd;
-    padding: 10px;
+.borrowed-books th,
+.borrowed-books td {
+    padding: 12px;
     text-align: left;
+    border-bottom: 1px solid #ddd;
 }
 
-th {
-    background-color: #f4f4f4;
+.borrowed-books th {
+    background-color: #f5f5f5;
     font-weight: bold;
-}
-
-caption {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.account {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    margin-top: 20px;
-}
-
-button, #b1 {
-    background-color: #2c2c2c;
-    color: white;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-#b1 {
-    background-color: rgb(67, 112, 209);
-}
-
-button:hover, #b1:hover {
-    background-color: #444;
-    color: white;
-}
-
-td {
-    padding: 10px;
-    border: none;
 }
 
 footer {
+    margin-top: 40px;
     text-align: center;
-    padding: 5px;
-    background-color: #f1f1f1;
-    position: relative;
-    width: 100%;
+    padding: 20px;
+}
+
+footer a {
+    color: #2196F3;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
 }
 
 body, html {
