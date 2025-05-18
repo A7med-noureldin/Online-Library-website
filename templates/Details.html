@@ -10,7 +10,9 @@ Library Manager{% endblock %} {% block extra_css %}
       <h3>{{book.title}}</h3>
       <div class="tags">
         <ul>
-          <li class="tag">Author: <span class="au-name">{{book.author}}</span></li>
+          <li class="tag">
+            Author: <span class="au-name">{{book.author}}</span>
+          </li>
           <li class="tag">Category: <span>{{book.category}}</span></li>
           <li class="tag">Book ID: <span>{{book.id}}</span></li>
         </ul>
@@ -22,19 +24,21 @@ Library Manager{% endblock %} {% block extra_css %}
 
   <div class="btns">
     {% if user.is_authenticated and user.role == "admin" %}
-    <button>Edit</button>
+    <a href="{% url 'edit_book' book_id=book.id %}"><button>Edit</button></a>
+
     <form method="post" action="{% url 'book_details' book.id %}">
       {% csrf_token %}
       <button type="submit" name="delete">Delete</button>
     </form>
-    {% endif %} {% if user.is_authenticated %} {% if book.isBorrowed %}
+    {% endif %} {% if user.is_authenticated and user.role == "user" %} 
+    {% if book.isBorrowed %}
     {% if book.borrowedBy == user %}
-    <form method="post" action="{% url 'book_details' book.id %}">
+    <form method="post" class="borrow"action="{% url 'book_details' book.id %}">
       {% csrf_token %}
       <button type="submit" name="return">Return</button>
     </form>
     {% endif %} {% else %}
-    <form method="post" action="{% url 'book_details' book.id %}">
+    <form method="post" class="borrow"action="{% url 'book_details' book.id %}">
       {% csrf_token %}
       <button type="submit" name="borrow">Borrow</button>
     </form>
