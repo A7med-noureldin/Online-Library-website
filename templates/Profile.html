@@ -17,12 +17,20 @@
         <tr>
             <td>Name</td>
             <td id="name-display">{{ user.name }}</td>
-            <td><button onclick="editField('name')">Edit</button></td>
+            <td>
+                <button onclick="editField('name')" id="edit-name-btn">Edit</button>
+                <button onclick="saveField('name')" id="save-name-btn" style="display: none;">Save</button>
+                <button onclick="cancelEdit('name')" id="cancel-name-btn" style="display: none;">Cancel</button>
+            </td>
         </tr>
         <tr>
             <td>Email</td>
             <td id="email-display">{{ user.email }}</td>
-            <td><button onclick="editField('email')">Edit</button></td>
+            <td>
+                <button onclick="editField('email')" id="edit-email-btn">Edit</button>
+                <button onclick="saveField('email')" id="save-email-btn" style="display: none;">Save</button>
+                <button onclick="cancelEdit('email')" id="cancel-email-btn" style="display: none;">Cancel</button>
+            </td>
         </tr>
         <tr>
             <td>Password</td>
@@ -44,9 +52,29 @@
                 <th>Book ID</th>
                 <th>Book Name</th>
                 <th>Author</th>
+                {% if user.role == 'admin' %}
+                <th>Borrowed By</th>
+                {% endif %}
             </tr>
         </thead>
-        <tbody id="borrowed-books-list"></tbody>
+        <tbody id="borrowed-books-list">
+            {% for book in borrowed_books %}
+            <tr>
+                <td>{{ book.id }}</td>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                {% if user.role == 'admin' %}
+                <td>{{ book.borrowed_by }}</td>
+                {% endif %}
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="{% if user.role == 'admin' %}4{% else %}3{% endif %}" class="no-books">
+                    No books borrowed yet.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
 </section>
 
@@ -57,4 +85,188 @@
 
 {% block extra_js %}
 <script src="{% static 'js/profile.js' %}"></script>
+<script>
+    let originalValues = {};
+
+    function editField(field) {
+        const displayElement = document.getElementById(`${field}-display`);
+        const editBtn = document.getElementById(`edit-${field}-btn`);
+        const saveBtn = document.getElementById(`save-${field}-btn`);
+        const cancelBtn = document.getElementById(`cancel-${field}-btn`);
+        
+        // Store original value
+        originalValues[field] = displayElement.textContent;
+        
+        // Create input field
+        const input = document.createElement('input');
+        input.type = field === 'email' ? 'email' : 'text';
+        input.value = originalValues[field];
+        input.id = `${field}-input`;
+        input.className = 'edit-input';
+        
+        // Replace display with input
+        displayElement.textContent = '';
+        displayElement.appendChild(input);
+        
+        // Show/hide buttons
+        editBtn.style.display = 'none';
+        saveBtn.style.display = 'inline-block';
+        cancelBtn.style.display = 'inline-block';
+    }
+
+    function cancelEdit(field) {
+        const displayElement = document.getElementById(`${field}-display`);
+        const editBtn = document.getElementById(`edit-${field}-btn`);
+        const saveBtn = document.getElementById(`save-${field}-btn`);
+        const cancelBtn = document.getElementById(`cancel-${field}-btn`);
+        
+        // Restore original value
+        displayElement.textContent = originalValues[field];
+        
+        // Show/hide buttons
+        editBtn.style.display = 'inline-block';
+        saveBtn.style.display = 'none';
+        cancelBtn.style.display = 'none';
+    }
+
+    function isValidEmail(email) {
+        // Regular expression for email validation
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        return emailRegex.test(email);
+    }
+
+    function saveField(field) {
+        const input = document.getElementById(`${field}-input`);
+        const newValue = input.value.trim();
+        const displayElement = document.getElementById(`${field}-display`);
+        const editBtn = document.getElementById(`edit-${field}-btn`);
+        const saveBtn = document.getElementById(`save-${field}-btn`);
+        const cancelBtn = document.getElementById(`cancel-${field}-btn`);
+        
+        // Validate email if the field is email
+        if (field === 'email' && !isValidEmail(newValue)) {
+            alert('Please enter a valid email address (e.g., example@domain.com)');
+            return;
+        }
+        
+        // Prepare data for API call - only include the field being edited
+        const data = {};
+        if (field === 'name') {
+            data.username = newValue;
+        } else if (field === 'email') {
+            data.email = newValue;
+        }
+        
+        // Send update request
+        fetch('/api/update-profile/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update display with new value
+                displayElement.textContent = newValue;
+                originalValues[field] = newValue;
+                
+                // Show success message
+                alert(data.message);
+            } else {
+                // Show error message
+                alert(data.message);
+                // Restore original value
+                displayElement.textContent = originalValues[field];
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while updating your profile.');
+            // Restore original value
+            displayElement.textContent = originalValues[field];
+        })
+        .finally(() => {
+            // Show/hide buttons
+            editBtn.style.display = 'inline-block';
+            saveBtn.style.display = 'none';
+            cancelBtn.style.display = 'none';
+        });
+    }
+
+    // Function to get CSRF token from cookies
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Add this at the end of your script section
+    document.addEventListener('DOMContentLoaded', function() {
+        // Refresh borrowed books list every 30 seconds
+        setInterval(updateBorrowedBooks, 30000);
+    });
+
+    function updateBorrowedBooks() {
+        fetch('/api/borrowed-books/')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('borrowed-books-list');
+                tbody.innerHTML = '';
+                
+                if (data.books.length === 0) {
+                    const tr = document.createElement('tr');
+                    const td = document.createElement('td');
+                    td.colSpan = data.isAdmin ? 4 : 3;
+                    td.className = 'no-books';
+                    td.textContent = 'No books borrowed yet.';
+                    tr.appendChild(td);
+                    tbody.appendChild(tr);
+                    return;
+                }
+                
+                data.books.forEach(book => {
+                    const tr = document.createElement('tr');
+                    
+                    // Book ID
+                    const tdId = document.createElement('td');
+                    tdId.textContent = book.id;
+                    tr.appendChild(tdId);
+                    
+                    // Book Title
+                    const tdTitle = document.createElement('td');
+                    tdTitle.textContent = book.title;
+                    tr.appendChild(tdTitle);
+                    
+                    // Author
+                    const tdAuthor = document.createElement('td');
+                    tdAuthor.textContent = book.author;
+                    tr.appendChild(tdAuthor);
+                    
+                    // Borrowed By (only for admin)
+                    if (data.isAdmin) {
+                        const tdBorrowedBy = document.createElement('td');
+                        tdBorrowedBy.textContent = book.borrowed_by;
+                        tr.appendChild(tdBorrowedBy);
+                    }
+                    
+                    tbody.appendChild(tr);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching borrowed books:', error);
+            });
+    }
+</script>
 {% endblock %}
