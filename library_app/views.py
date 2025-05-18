@@ -3,15 +3,17 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
 from django.contrib import messages
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.contrib.auth import get_user_model
-import json
-from .models import User, Book
-from django.urls import reverse
-from django.views.decorators.csrf import ensure_csrf_cookie
 from django.core.exceptions import ValidationError
+from django.urls import reverse
+
 from datetime import datetime
+import json
 import random
+
+from .models import User, Book
+
 # Create your views here.
 def home(request):
     return render(request, 'Home.html')
@@ -106,12 +108,33 @@ def profile(request):
     if not request.user.is_authenticated:
         return redirect('login')
     user = request.user
+    
+    # Get borrowed books based on user role
+    if user.role == 'admin':
+        # For admin, get all borrowed books
+        borrowed_books = Book.objects.filter(isBorrowed=True)
+    else:
+        # For regular users, get only their borrowed books
+        borrowed_books = Book.objects.filter(isBorrowed=True, borrowedBy=user)
+    
+    # Convert to list of dictionaries for JSON response
+    borrowed_books_data = [
+        {
+            'id': book.id,
+            'title': book.title,
+            'author': book.author,
+            'borrowed_by': book.borrowedBy.username if book.borrowedBy else None
+        }
+        for book in borrowed_books
+    ]
+    
     context = {
         'user': {
             'name': user.username,
             'email': user.email,
             'role': user.role
-        }
+        },
+        'borrowed_books': borrowed_books_data
     }
     return render(request, 'Profile.html', context)
 
@@ -365,4 +388,85 @@ def book_details(request, book_id):
 
 
     return render(request, 'Details.html', {'book': book})
+
+@login_required
+def update_profile(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            new_username = data.get('username')
+            new_email = data.get('email')
+            
+            user = request.user
+            username_changed = False
+            
+            # Only update fields that are provided and different from current values
+            if new_username and new_username != user.username:
+                # Check if username is already taken by another user
+                if User.objects.filter(username=new_username).exists():
+                    return JsonResponse({'success': False, 'message': 'Username already exists.'})
+                user.username = new_username
+                username_changed = True
+            
+            if new_email and new_email != user.email:
+                # Check if email is already taken by another user
+                if User.objects.filter(email=new_email).exists():
+                    return JsonResponse({'success': False, 'message': 'Email already exists.'})
+                user.email = new_email
+            
+            # Only save if there were changes
+            if new_username != user.username or new_email != user.email:
+                user.save()
+                
+                # If username was changed, update the session
+                if username_changed:
+                    # Update the session with the new username
+                    request.session['username'] = new_username
+                    # Update the auth backend's session
+                    update_session_auth_hash(request, user)
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Profile updated successfully!',
+                'user': {
+                    'name': user.username,
+                    'email': user.email,
+                    'role': user.role
+                }
+            })
+            
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+    
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
+@login_required
+def get_borrowed_books(request):
+    user = request.user
+    
+    # Get borrowed books based on user role
+    if user.role == 'admin':
+        # For admin, get all borrowed books
+        borrowed_books = Book.objects.filter(isBorrowed=True)
+    else:
+        # For regular users, get only their borrowed books
+        borrowed_books = Book.objects.filter(isBorrowed=True, borrowedBy=user)
+    
+    # Convert to list of dictionaries for JSON response
+    books_data = [
+        {
+            'id': book.id,
+            'title': book.title,
+            'author': book.author,
+            'borrowed_by': book.borrowedBy.username if book.borrowedBy else None
+        }
+        for book in borrowed_books
+    ]
+    
+    return JsonResponse({
+        'books': books_data,
+        'isAdmin': user.role == 'admin'
+    })
+
+
 
