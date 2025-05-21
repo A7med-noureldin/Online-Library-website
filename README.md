@@ -1,4 +1,4 @@
-# Online Library Django Project
+# Online Library Project
 #### This project is a web-based Online Library system built with Django, allowing users to browse, borrow, and return books, while administrators can manage the book inventory and user activity.
 
 ## Features
